@@ -1,3 +1,11 @@
 {
+  "services": {
+    "personal-portfolio": {
+      "root": "."
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": { "service": "personal-portfolio" } }
+  ],
   "regions": ["gru1"]
 }
