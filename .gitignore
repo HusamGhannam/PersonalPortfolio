@@ -1,0 +1,24 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.userprefs
+*.csproj.user
+*.dbmdl
+*.jfm
+.vs/
+*.log
+
+# SQLite database (keep local copy — Vercel generates fresh)
+portfolio.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

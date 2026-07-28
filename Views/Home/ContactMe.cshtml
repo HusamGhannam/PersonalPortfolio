@@ -1,0 +1,133 @@
+@{
+    ViewData["Title"] = "Contact Me";
+}
+
+<section class="page-header">
+    <div class="container">
+        <span class="section-eyebrow">Get in Touch</span>
+        <h2>Contact Me</h2>
+        <p style="color: var(--text-secondary); max-width: 500px; margin: 0.75rem auto 0;">Have a question or want to work together? Send a message.</p>
+    </div>
+</section>
+
+<section class="contact-section" style="padding-bottom: var(--section-gap);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="contact-card reveal">
+                    <!-- Error message -->
+                    <div id="contact-error" class="contact-error text-center mb-3" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        <span id="contact-error-text"></span>
+                    </div>
+
+                    <!-- Success state -->
+                    <div id="contact-success" class="contact-success text-center" style="display: none;">
+                        <div style="width: 64px; height: 64px; margin: 0 auto 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <h4>Message Sent!</h4>
+                        <p>Thank you for reaching out. I'll get back to you soon.</p>
+                        <button class="btn btn-outline-primary mt-2" onclick="resetContactForm()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                            Send Another Message
+                        </button>
+                    </div>
+
+                    <!-- Contact form -->
+                    <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="contactName" name="Name" placeholder="Your Name" required maxlength="100" />
+                            <label for="contactName">Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="contactEmail" name="Email" placeholder="Your Email" required maxlength="200" />
+                            <label for="contactEmail">Email</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="contactSubject" name="Subject" placeholder="Subject" required maxlength="200" />
+                            <label for="contactSubject">Subject</label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <textarea class="form-control message-textarea" id="contactMessage" name="Message" placeholder="Your Message" rows="5" required maxlength="2000"></textarea>
+                            <label for="contactMessage">Message</label>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" id="contact-submit-btn" class="btn btn-primary btn-lg contact-submit-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                <span id="contact-submit-text">Send Message</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        (function () {
+            var form = document.getElementById('contact-form');
+            var submitBtn = document.getElementById('contact-submit-btn');
+            var submitText = document.getElementById('contact-submit-text');
+            var errorDiv = document.getElementById('contact-error');
+            var errorText = document.getElementById('contact-error-text');
+            var successDiv = document.getElementById('contact-success');
+
+            window.handleContactSubmit = function (e) {
+                e.preventDefault();
+
+                submitBtn.disabled = true;
+                submitText.textContent = 'Sending...';
+                errorDiv.style.display = 'none';
+
+                var data = {
+                    name: document.getElementById('contactName').value,
+                    email: document.getElementById('contactEmail').value,
+                    subject: document.getElementById('contactSubject').value,
+                    message: document.getElementById('contactMessage').value
+                };
+
+                fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(function (res) {
+                    if (res.ok) {
+                        form.style.display = 'none';
+                        successDiv.style.display = 'block';
+                    } else {
+                        return res.json().then(function () {
+                            showError('Something went wrong. Please try again later.');
+                        });
+                    }
+                })
+                .catch(function () {
+                    showError('Unable to connect. Please check your connection and try again.');
+                })
+                .finally(function () {
+                    submitBtn.disabled = false;
+                    submitText.textContent = 'Send Message';
+                });
+            };
+
+            window.resetContactForm = function () {
+                form.reset();
+                form.style.display = 'block';
+                successDiv.style.display = 'none';
+                errorDiv.style.display = 'none';
+            };
+
+            function showError(msg) {
+                errorText.textContent = msg;
+                errorDiv.style.display = 'block';
+            }
+        })();
+    </script>
+}

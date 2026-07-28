@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Husam Ghannam - Full-Stack Developer";
+    int projectCount = ViewBag.ProjectCount ?? 0;
+    int skillCount = ViewBag.SkillCount ?? 0;
+    int certCount = ViewBag.CertCount ?? 0;
+}
+
+<!-- ============================================
+     HERO SECTION
+     ============================================ -->
+<section class="hero-wrapper">
+    <!-- Floating Particles -->
+    <div class="hero-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Gradient Orb -->
+    <div class="hero-orb"></div>
+
+    <!-- Content -->
+    <div class="hero-content">
+        <div class="hero-eyebrow">Full-Stack Developer</div>
+        <h1 class="hero-name">Husam Ghannam</h1>
+        <p class="hero-subtitle">
+            Building modern web applications with clean architecture, scalable systems, and exceptional user experiences.
+        </p>
+        <div class="hero-actions">
+            <a asp-controller="Home" asp-action="Projects" class="btn btn-primary btn-glow">
+                <i class="fas fa-folder-open"></i> View Projects
+            </a>
+            <a asp-controller="Home" asp-action="ContactMe" class="btn btn-outline-primary">
+                <i class="fas fa-envelope"></i> Contact Me
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     QUICK STATS SECTION
+     ============================================ -->
+<section style="padding: 4rem 0 6rem;">
+    <div class="container">
+        <div class="row g-4 reveal-stagger">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">@projectCount</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">@skillCount</div>
+                    <div class="stat-label">Skills</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">@certCount</div>
+                    <div class="stat-label">Certificates</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

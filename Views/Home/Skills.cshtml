@@ -1,0 +1,50 @@
+@model List<PersonalPortfolio.Models.Skill>
+
+@{
+    ViewData["Title"] = "Skills";
+}
+
+<section class="page-header">
+    <div class="container">
+        <span class="section-eyebrow">Expertise</span>
+        <h2>Skills</h2>
+        <p style="color: var(--text-secondary); max-width: 500px; margin: 0.75rem auto 0;">Technologies and tools I work with.</p>
+    </div>
+</section>
+
+<section style="padding-bottom: var(--section-gap);">
+    <div class="container">
+        @if (Model.Count == 0)
+        {
+            <div class="empty-state">
+                <i class="fas fa-graduation-cap"></i>
+                <p>No skills found.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row justify-content-center reveal-stagger">
+                @foreach (var skill in Model)
+                {
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="@skill.IconClass"></i>
+                            </div>
+                            <div class="skill-info">
+                                <h5 class="skill-name">@skill.Name</h5>
+                                <span class="skill-category">@skill.Category</span>
+                                <div class="skill-proficiency">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span class="proficiency-dot @(i <= skill.ProficiencyLevel ? "active" : "")"></span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
