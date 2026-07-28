@@ -1,6 +1,7 @@
 # Vercel Container Image — ASP.NET Core 10
 # Vercel auto-detects Dockerfile.vercel and builds the container image.
 # The app must listen on $PORT (injected by Vercel at runtime).
+# .NET 10 uses HTTP_PORTS env var which works with Vercel's PORT.
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
@@ -14,12 +15,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 COPY --from=build /app .
 
-# Copy entrypoint that adapts to Vercel's $PORT
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Default port — Vercel overrides via PORT env var
+# .NET 10 reads HTTP_PORTS env var — Vercel sets PORT which maps to HTTP_PORTS
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["dotnet", "PersonalPortfolio.dll"]

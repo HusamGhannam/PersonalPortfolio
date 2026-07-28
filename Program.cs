@@ -75,15 +75,18 @@ builder.Services.AddScoped<ICertificateService, CertificateService>();
 
 var app = builder.Build();
 
-// Database migrations and seeding — ONLY in development
+// Database migrations — run in all environments to ensure schema is up to date
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
+// Seed admin user and role — only in development (safe for initial setup)
 if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        db.Database.Migrate();
-        
-        // Seed admin user and role
         await SeedData.InitializeAsync(scope.ServiceProvider);
     }
 }
