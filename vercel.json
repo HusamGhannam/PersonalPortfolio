@@ -1,7 +1,8 @@
 {
   "services": {
     "personal-portfolio": {
-      "root": "."
+      "root": ".",
+      "entrypoint": "Dockerfile.vercel"
     }
   },
   "rewrites": [
