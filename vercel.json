@@ -1,9 +1,3 @@
 {
-  "services": {
-    "personal-portfolio": {
-      "runtime": "container",
-      "root": "."
-    }
-  },
   "regions": ["gru1"]
 }
