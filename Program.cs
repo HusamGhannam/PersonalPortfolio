@@ -76,10 +76,21 @@ builder.Services.AddScoped<ICertificateService, CertificateService>();
 var app = builder.Build();
 
 // Database migrations — run in all environments to ensure schema is up to date
-using (var scope = app.Services.CreateScope())
+try
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        Console.WriteLine("Running database migrations...");
+        db.Database.Migrate();
+        Console.WriteLine("Database migrations completed.");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Database migration error: {ex.GetType().Name}: {ex.Message}");
+    Console.WriteLine($"Stack: {ex.StackTrace}");
+    throw;
 }
 
 // Seed admin user and role — only in development (safe for initial setup)
