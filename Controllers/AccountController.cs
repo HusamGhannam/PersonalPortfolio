@@ -18,13 +18,13 @@ namespace PersonalPortfolio.Controllers
             _signInManager = signInManager;
         }
 
-        // =====================
-        // Login — accessible at /Login
-        // =====================
+// =====================
+// Login — accessible at /Account/Login (matching LoginPath cookie config)
+// =====================
 
-        [HttpGet]
-        [Route("Login")]
-        public IActionResult Login(string? returnUrl = null)
+[HttpGet]
+[Route("Account/[action]")]
+public IActionResult Login(string? returnUrl = null)
         {
             // If already logged in as Admin, go straight to admin panel
             if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
@@ -35,7 +35,7 @@ namespace PersonalPortfolio.Controllers
         }
 
         [HttpPost]
-        [Route("Login")]
+        [Route("Account/Login")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {

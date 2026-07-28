@@ -2,6 +2,7 @@ using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
 using PersonalPortfolio.Data;
 using PersonalPortfolio.Middleware;
 using PersonalPortfolio.Models;
@@ -73,7 +74,18 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ISkillService, SkillService>();
 builder.Services.AddScoped<ICertificateService, CertificateService>();
 
+// Configure forwarded headers for reverse proxy (Vercel)
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 var app = builder.Build();
+
+// Forwarded headers middleware — must be early in the pipeline
+app.UseForwardedHeaders();
 
 // Database migrations — run in all environments to ensure schema is up to date
 try
