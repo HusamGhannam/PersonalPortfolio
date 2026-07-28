@@ -5,5 +5,8 @@
       "root": "."
     }
   },
+  "rewrites": [
+    { "source": "/(.*)", "destination": { "service": "personal-portfolio" } }
+  ],
   "regions": ["gru1"]
 }
