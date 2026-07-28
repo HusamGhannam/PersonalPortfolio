@@ -1,12 +1,3 @@
 {
-  "services": {
-    "personal-portfolio": {
-      "root": ".",
-      "entrypoint": "Dockerfile.vercel"
-    }
-  },
-  "rewrites": [
-    { "source": "/(.*)", "destination": { "service": "personal-portfolio" } }
-  ],
   "regions": ["gru1"]
 }
